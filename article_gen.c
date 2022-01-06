@@ -1,17 +1,11 @@
 #include "jssg.h"
 #include <stdio.h>
+#include <string.h>
+#define MAX_LINE_LEN 500
 
 void parse_char(int c, FILE *fp);
 
-char get_char(FILE *fp) {
-	char c;
-	if ((c = getc(fp)) != EOF) {
-		return c;
-	}
-	else {
-		return 0;
-	}
-}
+
 
 void parse_command(FILE *fp) {
 	char cmd = get_char(fp);
@@ -44,15 +38,29 @@ void parse_char(int c, FILE *fp) {
 	}	
 }
 
-void generate_article(char* header, char* footer, char* fname) {
+Article generate_article(char* header, char* footer, char* fname) {
 	printf("%s\n", header);
-	printf("<p>");
 	char c;
 	FILE *fp;
 	fp = fopen(fname, "r");
+	char title[MAX_LINE_LEN];
+	char date[MAX_LINE_LEN];
+	get_line(title, fp);
+	get_line(date, fp);
+	printf("<h1>%s</h1>\n", title);
+	printf("<h3>%s</h3>\n", date);
+	printf("<p>");
 	while ((c = get_char(fp)) != 0) {
 		parse_char(c, fp);
 	}
 	printf("</p>\n");
 	printf("%s", footer);
+	Article a;
+
+	a.date  = date;
+	a.title = title;
+	strcat(fname, ".html");
+	a.fname = fname;
+
+	return a;
 }
