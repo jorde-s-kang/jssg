@@ -1,24 +1,4 @@
-#define _GNU_SOURCE
 #include "jssg.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define MAX_LINE_LEN 500
-
-void parse_char(int c, FILE *fp, FILE *wp);
-
-
-
-void parse_command(FILE *fp, FILE *wp) {
-	char cmd[MAX_LINE_LEN] = {0};
-	int i = 0;
-	char c;
-	while ((c = getc(fp)) != '{' && i < MAX_LINE_LEN) {
-		cmd[i] = c;
-		i++;
-	}
-	write_str(wp, "command(%s)", cmd);
-}
 
 void handle_newline(FILE *fp, FILE *wp) {
 	char next;
@@ -82,5 +62,4 @@ Article generate_article(char* header, char* footer, char* fname) {
 	strcpy(a.fname, fname);
 
 	return a;
-
 }

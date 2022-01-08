@@ -1,11 +1,8 @@
 #include "jssg.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <dirent.h>
-#include <string.h>
 
 #define MAX_FILE_SIZE 5000
 #define MAX_ARTICLES 100
+#define MAX_LINE_LEN 500
 
 int main(int argc, char *argv[]) {
 	char* header_path    = getenv("JSSG_HEADER");
@@ -36,19 +33,30 @@ int main(int argc, char *argv[]) {
 				char fullname[50] = {0};
 				strcat(fullname, articles_path);
 				strcat(fullname, dir->d_name);
-				char *contents_line = {0};
 				Article a = generate_article(header, footer, fullname);
 				articles[i] = a;
 				i++;
 			}
 		}
 	}
+	FILE *wp;
+	wp = fopen(contents_path, "w+");
+	write_str(wp, "%s\n", header);
+	write_str(wp, "%s\n", "<ul>");
+	int size;
+	char* line_str;
 
 	for (i = 0; i < MAX_ARTICLES; ++i) {
+
 		Article a = articles[i];
 		if(a.title[0] == '\0')
 			break;
-		printf("<li>%s - <a href='%s'>%s</a></li>\n", a.date, a.fname, a.title);
+		size = asprintf(&line_str, "<li>%s - <a href='%s'>%s</a></li>\n", a.date, a.fname, a.title);
+		fputs(line_str, wp);
+		free(line_str);
 
 	}
+	write_str(wp, "%s\n", "</ul>");
+	write_str(wp, "%s\n", footer);
+	fclose(wp);
 }

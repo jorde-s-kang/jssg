@@ -1,8 +1,4 @@
-#define _GNU_SOURCE
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
-#include <stdlib.h>
+#include "jssg.h"
 
 void read_file(char* file_buf, char* path, int count) {
 	int i = 0;
@@ -19,7 +15,7 @@ void read_file(char* file_buf, char* path, int count) {
 void get_line(char* buffer, FILE *fp) {
 	char c;
 	int i = 0;
-	while((c = getc(fp)) != EOF && c != '\n') {
+	while((c = getc(fp)) != EOF && c != '\n' && i <= MAX_LINE_LEN) {
 		buffer[i] = c;
 		i++;
 	}
