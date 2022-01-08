@@ -9,12 +9,12 @@
 #define MAX_LINE_LEN 500
 
 // Data types
-typedef struct Article
-{
-        char title[MAX_LINE_LEN];
-	char date[MAX_LINE_LEN] ;
-	char fname[MAX_LINE_LEN];
-} Article;
+/* typedef struct Article */
+/* { */
+/*         char title[MAX_LINE_LEN]; */
+/* 	char date[MAX_LINE_LEN] ; */
+/* 	char fname[MAX_LINE_LEN]; */
+/* } Article; */
 
 // util.c
 void read_file(char *file_buf, char* path, int count);
@@ -24,7 +24,7 @@ void write_str(FILE *wp, char* fmt, char* str);
 
 // article_gen.c
 void parse_char(int c, FILE *fp, FILE *wp);
-Article generate_article(char* header, char* footer, char* fname);
+void generate_article(char* header, char* footer, char* fnam, FILE* cp);
 
 // command.c
 void parse_command(FILE *fp, FILE *wp);

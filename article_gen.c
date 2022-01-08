@@ -25,7 +25,7 @@ void parse_char(int c, FILE *fp, FILE *wp) {
 	}	
 }
 
-Article generate_article(char* header, char* footer, char* fname) {
+void generate_article(char* header, char* footer, char* fname, FILE* cp) {
 	char c;
 	FILE *fp;
 	fp = fopen(fname, "r");
@@ -56,10 +56,8 @@ Article generate_article(char* header, char* footer, char* fname) {
 	fclose(fp);
 	fclose(wp);
 
-	Article a;
-	strcpy(a.date, date);
-	strcpy(a.title, title);
-	strcpy(a.fname, fname);
-
-	return a;
+	char* line_str;
+	int size = asprintf(&line_str, "<li>%s - <a href='%s'>%s</a></li>\n", date, fname, title);
+	fputs(line_str, cp);
+	free(line_str);
 }
