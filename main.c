@@ -7,10 +7,10 @@
 int main(int argc, char *argv[]) {
 	char* header_path    = getenv("JSSG_HEADER");
 	char* footer_path    = getenv("JSSG_FOOTER");
-	char* contents_path  = getenv("JSSG_CONTENTS");
+	char* index_path  = getenv("JSSG_INDEX");
 	char* articles_path  = getenv("JSSG_ARTICLES");
 
-	if (!(header_path && footer_path && contents_path && articles_path)) {
+	if (!(header_path && footer_path && index_path && articles_path)) {
 		printf("Please set JSSG_HEADER, JSSG_FOOTER, JSSG_CONTENTS and JSSG_ARTICLES environment variables.\n");
 		exit(1);
 	}
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 	d = opendir(articles_path);
 	int i = 0;
 	FILE *cp;
-	cp = fopen(contents_path, "w+");
+	cp = fopen(index_path, "w+");
 	write_str(cp, "%s\n", header);
 	write_str(cp, "%s\n", "<ul>");	
 	while ((dir = readdir(d)) != NULL) {

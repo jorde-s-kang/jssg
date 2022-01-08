@@ -7,5 +7,5 @@ in the process as well as automating site generation of my website.
 
 ## Usage 
 
-Set the `JSSG_HEADER`, `JSSG_FOOTER`, `JSSG_CONTENTS` and
+Set the `JSSG_HEADER`, `JSSG_FOOTER`, `JSSG_INDEX` and
 `JSSG_ARTICLES` environment variables appropriately and then just run.
