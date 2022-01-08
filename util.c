@@ -1,5 +1,8 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
+#include <stdlib.h>
 
 void read_file(char* file_buf, char* path, int count) {
 	int i = 0;
@@ -30,4 +33,11 @@ char get_char(FILE *fp) {
 	else {
 		return 0;
 	}
+}
+
+void write_str(FILE *wp, char* fmt, char* str) {
+	char* out_str;
+	int size = asprintf(&out_str, fmt, str);
+	fputs(out_str, wp);
+	free(out_str);
 }

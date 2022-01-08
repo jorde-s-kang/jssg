@@ -1,66 +1,81 @@
+#define _GNU_SOURCE
 #include "jssg.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #define MAX_LINE_LEN 500
 
-void parse_char(int c, FILE *fp);
+void parse_char(int c, FILE *fp, FILE *wp);
 
 
 
-void parse_command(FILE *fp) {
+void parse_command(FILE *fp, FILE *wp) {
 	char cmd = get_char(fp);
 	printf("command(%c)", cmd);
 
 }
 
-void handle_newline(FILE *fp) {
+void handle_newline(FILE *fp, FILE *wp) {
 	char next;
 	next = get_char(fp);
 	if (next == '\n') {
-		printf("</p>\n<p>");			
+		fputs("</p>\n<p>", wp);			
 	} else {
-		parse_char(next, fp);
+		parse_char(next, fp, wp);
 	}
 }
 
-void parse_char(int c, FILE *fp) {
+void parse_char(int c, FILE *fp, FILE *wp) {
 	switch(c) {
 	case '\n':
-		handle_newline(fp);
+		handle_newline(fp, wp);
 		break;
 	case '\\':
-		parse_command(fp);
+		parse_command(fp, wp);
 		break;
 	default:
 		if (c != 0)
-			printf("%c", c);
+			putc(c, wp);
 		break;
 	}	
 }
 
 Article generate_article(char* header, char* footer, char* fname) {
-	printf("%s\n", header);
 	char c;
 	FILE *fp;
 	fp = fopen(fname, "r");
-	char title[MAX_LINE_LEN];
-	char date[MAX_LINE_LEN];
+	
+	char title[MAX_LINE_LEN] = {0};
+	char date[MAX_LINE_LEN] = {0};
 	get_line(title, fp);
 	get_line(date, fp);
-	printf("<h1>%s</h1>\n", title);
-	printf("<h3>%s</h3>\n", date);
-	printf("<p>");
-	while ((c = get_char(fp)) != 0) {
-		parse_char(c, fp);
-	}
-	printf("</p>\n");
-	printf("%s", footer);
-	Article a;
 
-	a.date  = date;
-	a.title = title;
 	strcat(fname, ".html");
-	a.fname = fname;
+	FILE *wp;
+	wp = fopen(fname, "w+");	
+
+	char* header_str;
+
+	
+	write_str(wp, "%s\n", header);
+	write_str(wp, "<h1>%s</h1>\n", title);
+	write_str(wp, "<h3>%s</h3>\n", date);
+
+	fputs("<p>", wp);
+	while ((c = get_char(fp)) != 0) {
+		parse_char(c, fp, wp);
+	}
+	fputs("</p>\n", wp);
+	write_str(wp, "%s", footer);
+
+	fclose(fp);
+	fclose(wp);
+
+	Article a;
+	strcpy(a.date, date);
+	strcpy(a.title, title);
+	strcpy(a.fname, fname);
 
 	return a;
+
 }
