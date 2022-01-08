@@ -39,24 +39,30 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
+
+	closedir(d);
+	
 	FILE *wp;
 	wp = fopen(contents_path, "w+");
-	write_str(wp, "%s\n", header);
-	write_str(wp, "%s\n", "<ul>");
-	int size;
-	char* line_str;
+	if (wp) {
+		write_str(wp, "%s\n", header);
+		write_str(wp, "%s\n", "<ul>");
+		int size;
+		char* line_str;
+		for (i = 0; i < MAX_ARTICLES; ++i) {
+			Article a = articles[i];
+			if(a.title[0] == '\0')
+				break;
+			size = asprintf(&line_str, "<li>%s - <a href='%s'>%s</a></li>\n", a.date, a.fname, a.title);
+			fputs(line_str, wp);
+			free(line_str);
 
-	for (i = 0; i < MAX_ARTICLES; ++i) {
-
-		Article a = articles[i];
-		if(a.title[0] == '\0')
-			break;
-		size = asprintf(&line_str, "<li>%s - <a href='%s'>%s</a></li>\n", a.date, a.fname, a.title);
-		fputs(line_str, wp);
-		free(line_str);
-
+		}
+		write_str(wp, "%s\n", "</ul>");
+		write_str(wp, "%s\n", footer);
+		fclose(wp);
+	} else {
+		printf("Failed to open %s", contents_path);
 	}
-	write_str(wp, "%s\n", "</ul>");
-	write_str(wp, "%s\n", footer);
-	fclose(wp);
+	exit(0);
 }

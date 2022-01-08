@@ -5,9 +5,13 @@ void read_file(char* file_buf, char* path, int count) {
 	char c;
 	FILE *fp;
 	fp = fopen(path, "r");
-	while ((c = getc(fp)) != EOF && i <= count) {
-		file_buf[i] = c;
-		i++;
+	if (fp) {
+		while ((c = getc(fp)) != EOF && i <= count) {
+			file_buf[i] = c;
+			i++;
+		}
+	} else {
+		printf("Failed to open %s", path);
 	}
 	fclose(fp);
 }
