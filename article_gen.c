@@ -10,9 +10,14 @@ void parse_char(int c, FILE *fp, FILE *wp);
 
 
 void parse_command(FILE *fp, FILE *wp) {
-	char cmd = get_char(fp);
-	printf("command(%c)", cmd);
-
+	char cmd[MAX_LINE_LEN] = {0};
+	int i = 0;
+	char c;
+	while ((c = getc(fp)) != '{' && i < MAX_LINE_LEN) {
+		cmd[i] = c;
+		i++;
+	}
+	write_str(wp, "command(%s)", cmd);
 }
 
 void handle_newline(FILE *fp, FILE *wp) {
