@@ -6,6 +6,7 @@ void handle_newline(FILE *fp, FILE *wp) {
 	if (next == '\n') {
 		fputs("</p>\n<p>", wp);			
 	} else {
+		fputs(" ", wp);
 		parse_char(next, fp, wp);
 	}
 }
